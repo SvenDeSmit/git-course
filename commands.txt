@@ -1,0 +1,159 @@
+++ LINUX COMMANDS
+  
+  372  clear => clear console
+  373  start . => open win explorer
+  375  ls -l
+  376  ls -la => also show hidden files
+  379  history => show executed commands
+  380  mkdir my-dir
+  384  pwd => working dir
+
+  390  nano f => simple editor
+  391  cat f => toon file
+  400  tail f
+  401  head f
+
+  392  touch file2 => make file
+  394  echo test
+	echo "Third line" > f => overwrites file!
+  406  echo "Another file" >> f => append
+
+  421  rm file.txt
+  423  rm -rf my-dir/ => remove dir with files
+
+++ LOW LEVEL GIT COMMANDS
+
+  https://strongpasswordsgenerator.net/md5-hash-generator
+
+  374  git init => make folder git enabled
+  378  git --version
+  433  echo "hello, git" | git hash-object --stdin -w => store file object in .git object folder
+
+  449  git cat-file -p 94bab17c85ac96c4dd0cfcb7a16f22f6862733eb => text in file
+  450  git cat-file -s 94bab17c85ac96c4dd0cfcb7a16f22f6862733eb => size
+  451  git cat-file -t 94bab17c85ac96c4dd0cfcb7a16f22f6862733eb => type = blob
+
+find .git/objects -type f => find file objects in repo
+
+ls -l
+cat mktree.txt | git mktree => make txt file in linux/bash!histo
+git cat-file -p 6eaf => read tree object  
+git cat-file -t 6eaf => type = tree object  
+
+GIT repo = .git folder
+Staging area = git status
+Working Dir = windows folder of project
+
+git ls-files => files in STAGING area
+git ls-files -s => files in STAGING area + more info like ls -l
+git read-tree 6eaf => store tree in STAGING (overwrites!)
+
+git checkout-index -a => all file from STG to Working Dir
+
+++ GIT BASIC COMMANDS
+
+git status => status git repo
+git log => overview of commits
+
+git config --list => key/value pairs in config
+git config --global user.name SvenDeSmit
+
+git add maketree2.txt => add file to STG (= file is version managed!)
+git add . => add all untracked & modified files to STG
+git rm --cached file1.txt => undo add 
+
+
+// Commit = author + descr + parent + pointer to tree object (= soort version)
+//        = omgekeerde van read-tree 
+git commit -m "My first commit" => files from STG to GIT Repo
+git cat-file -p 2775 => contents of commit object name, email author, commiter + descr + pointer to tree object
+
+git commit -m "My first commit" -a => add + commit 
+
+HEAD = version in working dir (link to branch)
+branch = link (text reference) to commit object - has label - commit is default 
+
+detached HEAD state = HEAD is not linked to named branch (points directly tp commit object)
+
+git checkout 52b3 => moves HEAD to other commit object (version) - changes content HEAD file
+		  => updates content working dir!
+git checkout 52b3 => moves HEAD to master branch
+
+++ BRANCHES
+
+git branch => list local branches (+ current branch in HEAD)
+
+git branch my-branch => create branch
+git checkout my-branch => checkout branch (in HEAD)
+git checkout -b my-branch => create a branch + checkout (in HEAD)
+git branch -d my-branch => delete branch
+git branch -D my-branch => delete branch (deletes branch even if there are pending merges)
+
+
+cat pack-da136bc29911d250adc07bbf89dc7ce8897f6a8c.pack | git unpack-objects => unpack repo objects downloaded from GitHub
+
+++ DIFF & MERGE
+
+git diff => shows changes made in working dirgit cat
+
+Fast forward branch (only if no new commits in master branch) => moves pointer master branch to last commit of feature branch
+(master == feature)
+
+git merge BR-1 => in master branch! => auto merge BR-1 in master (as if BR-1 never existed)    
+
+3 way merge (if new commits in master branch) => true merge - new commit based on
+	- first common commit when split (nearesr ancestor)
+	- last commit master branch (parent 1)
+	- last commit feature branch (parent 2)
+
+git merge BR-2 => do a real merge!
+
+## GITHUB
+
+Tracking branch = local branch connected to remote branch (clone -> normally default branch eg. master/main)
+There can be multiple tracking branches!
+
+git clone https://github.com/SvenDeSmit/my-first-repo-git-course.git => CREATE local project from github project (creates new folder with same name as github)
+
+git remote => shows (list of) remote repo (default = origin)
+git remote -v => also shows GitHub url's - see clone 
+git remote show origin => shows a lot more info about github repo (local <-> remote branches = tracking branches)
+
+git branch -a => show local + remote branches in github
+git branch -r => only remote branches
+git branch -vv => shows tracking branch info (link local <-> remote branch)
+
+git checkout feature-1 => GET's feature-1 branch from remote repo!!!
+git branch -d feature-1 => deletes local feature-1 branch (not in github)
+
+git fetch => get remote changes (does not creates new branches locally -> use git checkout ...)
+
+git remote prune origin => remove tracking between local <-> remote branches
+(to remove local branch -> use git branch -d ...
+
+git fetch -v => fetch from github into local repo (v = verbose) - for all branches!!!
+
+git merge FETCH_HEAD => merges from local repo to local branch
+
+git pull -v => get fetch (load remote branch in local repo) + merge with your local code in the branch - only for curret local branch!!!
+
+git push -v => push local branch to github
+git push -u origin temp => push branch to github (create)
+git push -d origin temp => delete barnch from github
+
+git push --set-upstream origin feature-2 => setup tracking branch for feature-2 (local <-> remote)
+
+git remote update origin --prune => remove deleted remote branches locally
+
+git show-ref => show all references (local & remote)
+git show-ref feature-1 => show all references (local & remote) for branch
+
+
+## STORE EXISTING LOCAL REPO IN GITHUB
+
+echo "# APISecurityHTTPS" >> REA
+git init 
+git add .
+git commit -m "First commit"
+git remote add origin https://github.com/SvenDeSmit/APISecurity.git
+git push -u origin main
